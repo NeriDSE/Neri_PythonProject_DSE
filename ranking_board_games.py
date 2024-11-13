@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import scipy.stats as sps
 import matplotlib as mpl
 import csv
 import streamlit as st
@@ -35,60 +36,58 @@ data_by_rank
 data_sorted_by_bayes = clean_dataset_rank.sort_values("Bayes Average", ascending = False)
 data_sorted_by_bayes
 
+
+
 # Code for the Wilson function:
 
-# total number of positive reviews per game, you input the dataframe and the ID of a game 
-# and it gives you the total number of positive reviews for that game
-# useless I have a column in the first part that does exactly this ahahahhahah
+# Total number of positive reviews per game
+
 
 def count_positive_reviews_per_game(dataset, ID):
     
-    df_positive_reviews = dataset.loc[(dataset["ID"] == 1752) & (dataset['Rating'] >= 6.0)]
+    df_positive_reviews = dataset.loc[(dataset["ID"] == ID) & (dataset['Rating'] >= 6.0)]
     positive_reviews_count = df_positive_reviews['Rating'].count() 
 
     return int(positive_reviews_count)
 
-# Total reviews, is this the most efficient way? ask someone you know tomorrow
-def total_reviews(dataset):
-    for game in dataset:
-        total_reviews = dataset['Number_of_Ratings']
-    
-    return total_reviews
+# Total reviews:
+def total_reviews(dataset, ID):
+    total_reviews = dataset['Number_of_Ratings']
+    total_reviews_ID = total_reviews.loc[(dataset['ID']== ID)]
+    return int(total_reviews_ID.iloc[0])
 
-# I need a better way to say that. 
-# the following is the trial
-index = 0
-for index in range(21830):
-    int(total_reviews(dataset_ranks)[index])
-
-# I could make a function with the share of positive reviews, or 3 different functions,
-# I imagine a single one with all the other ones is better.
-
+# Ratio of positive review per total reviews
 def share_of_positive_reviews_per_game(ID):
-    count_positive_reviews_per_game(dataset_reviews, ID) / total_reviews(dataset_ranks)
+    share_of_pos_reviews_per_game = float(count_positive_reviews_per_game(clean_review_data, ID) / total_reviews(clean_dataset_rank, ID))
+    return round(share_of_pos_reviews_per_game, 4)
 
+# Calculating the ratio for every game (there is probably a better and faster implementation for this than a for loop)
 for id in clean_dataset_rank['ID']:
     share_of_positive_reviews_per_game(id)
-        
-        
 
-# part of the code for the greater Wilson function
-# which has to be a column in the end.
+# find the confidence level z_alpha/2
 
+def confidence_level(confidence):
+    cl = sps.norm.ppf(confidence)
+    return cl
+    
+# who decides the confidence in the end? 
+# you can ask for a confidence level
+# i'll set it but it' be cool if in the streamlit you could slide it and the 
+# distribution changes accordingly.
+# confidence = float(input("Please input a confidence level"))
 
+# Wilson function, otherwise known as the lower bound
+# on the propoertion f positive ratings
+def Wilson_Function(ID, confidence):
+    
+    z = confidence_level(confidence)
+    p_hat = share_of_positive_reviews_per_game(ID)
+    n = total_reviews(clean_dataset_rank, ID)
+    
+    Wilson_Score = round(float((p_hat + (z**2)/2*n - z*np.sqrt((p_hat*(1-p_hat) + (z**2)/4*n)/n)) / (1 + (z**2)/n)), 2)
+    
+    return Wilson_Score
 
-
-
-
-
-# take all the positive rankings associated to that id. (above 6, according to the score)
-        
-# return me the wilson score, i'd say.
-        
-# then I can start graphing shit and other stuff
-# count the number of positive ratings in the review table, what's the best way to do this? can I do this through SQL?
-
-# my biggest question is, if there was a more
-# efficient way to do things will you take points away?
-# or is it just about fulfilling the criteria and
-# being able to explain everything?
+# now that I have my wilson score I can compare it to the other ones
+# I guess? 

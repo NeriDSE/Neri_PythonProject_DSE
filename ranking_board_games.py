@@ -104,17 +104,20 @@ def array_scores(dataset, ID):
 def Bayesian_Average(ID, confidence = .95):
     z = confidence_level(confidence)
     n = array_scores(clean_review_data, ID)
+    N = sum(n)
+    first_part = 0
+    second_part = 0
+    for k, n_k in enumerate(n):
+        first_part += (k+1)*(n[k]+1)/(N + 10)
+        second_part += (k+1)*(k+1)*(n[k]+1)/(N+10)
+    score = first_part - z*np.sqrt((second_part - first_part*first_part)/(N+11))
     
-    # array thing, I have to have a function for that I think.
-    
-    for k in, n_k in enumerate(n):
-        
-    
-    
-    return x
+    return score
 
 # now that I have my wilson score I can compare it to the other ones. I think I have to make a new column add it to the og dataframe and 
-# rank them by Wilson Score, and I have to graph them. Should be doable tho idk.
+# rank them by Wilson Score, and I have to graph them.
+
+# Possibly the same thing with the Bayesian score, tomorrow just graph them
 
 
 # What types of objects/class could I run here? the class' purpose is a template of objects that you create a new instance of every time.
@@ -130,3 +133,4 @@ def Bayesian_Average(ID, confidence = .95):
 # I could count the year or the playing time/cost but I would have to download new datasets and merge them with the old ones
 # keeping count of when these datasets were assembled.
 
+# I made the bayesian thing

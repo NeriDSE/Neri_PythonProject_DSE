@@ -79,7 +79,7 @@ def confidence_level(confidence):
 
 # Wilson function, otherwise known as the lower bound
 # on the propoertion f positive ratings
-def Wilson_Function(ID, confidence):
+def Wilson_Function(ID, confidence = .95):
     
     z = confidence_level(confidence)
     p_hat = share_of_positive_reviews_per_game(ID)
@@ -89,25 +89,22 @@ def Wilson_Function(ID, confidence):
     
     return Wilson_Score
 
-def array_scores(ID):
+def array_scores(dataset, ID):
     list_scores = []
     i = 1
-    while i < 11:
-        for id in clean_review_data[ID]:
-            x = clean_review_data.count(clean_review_data["Rating"] == i)
-            list_scores.append(x)
-    i += 1
+    for i in range(1,11):
+        df_i_reviews = dataset.loc[(dataset['ID'] == ID) & (dataset['Rating'].between(i, i + 1, inclusive='left'))]
+        i_reviews = df_i_reviews['Rating'].count()
+        list_scores.append(int(i_reviews))
+        i =+ 1
     
     return list_scores
-        # find all the reviews associated with an ID with a certain number
-        # count them
-        # add them to the list
-        # do this for all the other scores
         
 
-def Bayesian_Average(ID, confidence=.95):
+def Bayesian_Average(ID, confidence = .95):
     z = confidence_level(confidence)
-    n = array_scores(ID)
+    n = array_scores(clean_review_data, ID)
+    
     # array thing, I have to have a function for that I think.
     
     for k in, n_k in enumerate(n):

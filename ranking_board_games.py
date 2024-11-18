@@ -70,7 +70,7 @@ for id in clean_dataset_rank['ID']:
 def confidence_level(confidence):
     cl = sps.norm.ppf(confidence)
     return cl
-    
+
 # who decides the confidence in the end? 
 # you can ask for a confidence level
 # i'll set it but it' be cool if in the streamlit you could slide it and the 
@@ -85,9 +85,51 @@ def Wilson_Function(ID, confidence):
     p_hat = share_of_positive_reviews_per_game(ID)
     n = total_reviews(clean_dataset_rank, ID)
     
-    Wilson_Score = round(float((p_hat + (z**2)/2*n - z*np.sqrt((p_hat*(1-p_hat) + (z**2)/4*n)/n)) / (1 + (z**2)/n)), 2)
+    Wilson_Score = round(float((p_hat + z**2/(2*n) - z*np.sqrt((p_hat*(1 - p_hat) + z**2/(4*n))/n)) / (1 + (z**2)/n)), 2)
     
     return Wilson_Score
 
-# now that I have my wilson score I can compare it to the other ones
-# I guess? 
+def array_scores(ID):
+    list_scores = []
+    i = 1
+    while i < 11:
+        for id in clean_review_data[ID]:
+            x = clean_review_data.count(clean_review_data["Rating"] == i)
+            list_scores.append(x)
+    i += 1
+    
+    return list_scores
+        # find all the reviews associated with an ID with a certain number
+        # count them
+        # add them to the list
+        # do this for all the other scores
+        
+
+def Bayesian_Average(ID, confidence=.95):
+    z = confidence_level(confidence)
+    n = array_scores(ID)
+    # array thing, I have to have a function for that I think.
+    
+    for k in, n_k in enumerate(n):
+        
+    
+    
+    return x
+
+# now that I have my wilson score I can compare it to the other ones. I think I have to make a new column add it to the og dataframe and 
+# rank them by Wilson Score, and I have to graph them. Should be doable tho idk.
+
+
+# What types of objects/class could I run here? the class' purpose is a template of objects that you create a new instance of every time.
+# the class of a game would make sense, the class of dataset with games? the class of the variables and the function? 
+# They'd be methods of a larger class what kind of object would need that kind of class? idk, we'll see
+
+
+# Find a way to rank the games:
+
+
+
+# I could count the number of comments. Find certain amounts of words.
+# I could count the year or the playing time/cost but I would have to download new datasets and merge them with the old ones
+# keeping count of when these datasets were assembled.
+

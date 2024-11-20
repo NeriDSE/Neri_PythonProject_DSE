@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-import scipy.stats as sps
+from scipy.stats import norm
 import matplotlib as mpl
 import csv
 import streamlit as st
@@ -67,9 +67,6 @@ for id in clean_dataset_rank['ID']:
 
 # find the confidence level z_alpha/2
 
-def confidence_level(confidence):
-    cl = sps.norm.ppf(confidence)
-    return cl
 
 # who decides the confidence in the end? 
 # you can ask for a confidence level
@@ -78,32 +75,37 @@ def confidence_level(confidence):
 # confidence = float(input("Please input a confidence level"))
 
 # Wilson function, otherwise known as the lower bound
-# on the propoertion f positive ratings
-def Wilson_Function(ID, confidence = .95):
-    
+# on the proportion of positive ratings
+def confidence_level(confidence):
+    cl = norm.ppf(1- (1 - confidence)/2)
+    return cl
+
+# with the list here you could use np.array to calculate all your total review stuff.
+def Wilson_Function(ID, dataset = clean_dataset_rank, confidence = .95):
     z = confidence_level(confidence)
-    p_hat = share_of_positive_reviews_per_game(ID)
-    n = total_reviews(clean_dataset_rank, ID)
+    n = total_reviews(dataset, ID)
+    p_hat = 1 * share_of_positive_reviews_per_game(ID) #/ total_reviews(clean_data, ID)
     
-    Wilson_Score = round(float((p_hat + z**2/(2*n) - z*np.sqrt((p_hat*(1 - p_hat) + z**2/(4*n))/n)) / (1 + (z**2)/n)), 2)
+    wilson_score = round(float((p_hat + z**2/(2*n) - z*np.sqrt((p_hat*(1 - p_hat) + z**2/(4*n))/n)) / (1 + (z**2)/n)), 2)
     
-    return Wilson_Score
+
+
+    return wilson_score
 
 def array_scores(dataset, ID):
     list_scores = []
-    i = 1
     for i in range(1,11):
         df_i_reviews = dataset.loc[(dataset['ID'] == ID) & (dataset['Rating'].between(i, i + 1, inclusive='left'))]
         i_reviews = df_i_reviews['Rating'].count()
+        
         list_scores.append(int(i_reviews))
-        i =+ 1
-    
+        
     return list_scores
         
 
-def Bayesian_Average(ID, confidence = .95):
+def Bayesian_Average(ID, dataset = clean_review_data, confidence = .95):
     z = confidence_level(confidence)
-    n = array_scores(clean_review_data, ID)
+    n = array_scores(dataset, ID)
     N = sum(n)
     first_part = 0
     second_part = 0
@@ -112,25 +114,40 @@ def Bayesian_Average(ID, confidence = .95):
         second_part += (k+1)*(k+1)*(n[k]+1)/(N+10)
     score = first_part - z*np.sqrt((second_part - first_part*first_part)/(N+11))
     
-    return score
+    return round(float(score), 2)
 
-# now that I have my wilson score I can compare it to the other ones. I think I have to make a new column add it to the og dataframe and 
-# rank them by Wilson Score, and I have to graph them.
+def New_Column(dataset, function):
+    # create an empty list (our future column)
+    New_column = []
+    # for each row in a dataset I have to find its ID and apply a the funciton over it
+    for id in dataset['ID']:
+        New_column.append(function(id))
+    
+    return New_column
 
-# Possibly the same thing with the Bayesian score, tomorrow just graph them
+clean_dataset_rank.insert(-1, 'Bayesian Average', New_Column(clean_dataset_rank, Bayesian_Average))
+clean_dataset_rank.insert(-1, 'Wilson_Score', New_Column(clean_dataset_rank, Wilson_Function))
+
+clean_data2 = clean_dataset_rank[clean_dataset_rank['Number_of_Ratings'] > 80000]
+clean_data2
+len(clean_data2)
+
+Bayesian_column = New_Column(clean_data2, Bayesian_Average)
 
 
-# What types of objects/class could I run here? the class' purpose is a template of objects that you create a new instance of every time.
-# the class of a game would make sense, the class of dataset with games? the class of the variables and the function? 
-# They'd be methods of a larger class what kind of object would need that kind of class? idk, we'll see
+clean_data2.insert(-1, 'Bayesian_Average', Bayesian_column )
 
-
-# Find a way to rank the games:
+# Calculate the Bayesian and Wilson score columns and graph them
+# it's proving difficult to obtain the columns.
 
 
 
-# I could count the number of comments. Find certain amounts of words.
-# I could count the year or the playing time/cost but I would have to download new datasets and merge them with the old ones
-# keeping count of when these datasets were assembled.
+# I could count the number of comments. Find certain amounts of words. mix the comments with the votes for example... 
+# the top voters, rank them. the experienced guard.
 
-# I made the bayesian thing
+# a new hotness rank. cool too. definetely possible, I want to finish on my OGs tomorrow with the graphs
+# maybe easier functions this time around.
+# Let's see, number of comments and votes
+# percentage of comments per positive votes? 
+
+# the people who've ranked the most. fair let's try it.

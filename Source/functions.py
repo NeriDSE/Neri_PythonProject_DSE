@@ -92,10 +92,23 @@ def add_new_column_to_dataset(dataset_input, dataset_output, function, title_of_
 
 # A function to create a database for each section of my data (most, mid, and leaset reviewed)
 
-def clean_review_data_x_reviewed(output_database, global_database):
-    desired_ids = output_database['ID']
-    clean_review_data_x_reviewed = global_database[global_database['ID'].isin(desired_ids)]
+def clean_review_data_x_reviewed(rank_database, operator, reviews, reviews_2 = None):
+    if operator == 'equal':
+        x_reviewed_database = rank_database[rank_database['Number_of_Ratings'] == reviews]
+    elif operator == 'greater':
+        x_reviewed_database = rank_database[rank_database['Number_of_Ratings'] > reviews]
+    elif operator == 'between':
+        x_reviewed_database = rank_database[rank_database['Number_of_Ratings'].between(reviews, reviews_2)]
+    else:
+        x_reviewed_database = rank_database[rank_database['Number_of_Ratings'] < reviews]
+    return x_reviewed_database
+ 
+def filtered_data_by_review(rank_by_review_data, reviews_database):    
+    desired_ids = rank_by_review_data['ID']
+    
+    clean_review_data_x_reviewed =  reviews_database[ reviews_database['ID'].isin(desired_ids)]
     return clean_review_data_x_reviewed
+
 
 # Graphing function:
 

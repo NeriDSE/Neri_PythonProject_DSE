@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import duckdb
 import os
-import functions as f
+import Source.ranking_algorithms as f
 
 
 data_path = os.path.join(os.getcwd(), 'Source\data')

@@ -29,13 +29,13 @@ clean_review_data = clean_review_data.rename(columns = {"user":"User", "rating":
 list_reviewed = ['Most reviewed (25k+)', 'Least reviewed (50 reviews)', 'In between (3500-4000)']
 selectbox = st.selectbox('How many reviews do you want your games to have', list_reviewed )
 
-for i in list_reviewed:
-    if i == selectbox:
-        x_reviewed_games = f.clean_review_data_x_reviewed(clean_rank_data, 'greater', 25000)
-        f.add_new_column_to_dataset(f.filtered_data_by_review(clean_rank_data, clean_review_data),  x_reviewed_games, f.Bayesian_Average, 'New_Bayesian_Average')
-    elif:
+# for i in list_reviewed:
+#     if i == selectbox:
+#         x_reviewed_games = f.clean_review_data_x_reviewed(clean_rank_data, 'greater', 25000)
+#         f.add_new_column_to_dataset(f.filtered_data_by_review(clean_rank_data, clean_review_data),  x_reviewed_games, f.Bayesian_Average, 'New_Bayesian_Average')
+#     elif:
     
-    else:
+#     else:
         
         # This should display the dataset of the games. So I guess I have to put them in here.
         

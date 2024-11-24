@@ -4,6 +4,7 @@ import os
 ''' Importing and Cleaning data'''
 
 data_path = os.path.join(os.getcwd(), 'data')
+print(data_path)
 
 rank_file = "2022-01-08.csv" 
 dataset_ranks = pd.read_csv(f'{data_path}\{rank_file}')

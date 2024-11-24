@@ -30,23 +30,25 @@ class dataset_by_review_bracket():
         filtered_review_data =  self.reviews_database[self.reviews_database['ID'].isin(desired_ids)]
         
         # create an empty list (our future column)
-        new_column = []
-        # for each row in a dataset I have to find its ID and apply a the function over it
-        for id in filtered_review_data['ID'].unique():
-            new_column.append(self.algorithm(id, self.rank_database, self.reviews_database))
-            
-        filtered_rank_data.insert(0, title_of_column, new_column)
-        
+        if title_of_column == 'Average':
+            return filtered_rank_data
+        else:
+            new_column = []
+            # for each row in a dataset I have to find its ID and apply a the function over it
+            for id in filtered_review_data['ID'].unique():
+                new_column.append(self.algorithm(id, self.rank_database, self.reviews_database))
+                
+            filtered_rank_data.insert(0, title_of_column, new_column)
         
         return filtered_rank_data
     
-    # sorting function:
+    # # sorting function:
     
-    def sorting(self, dataset_to_sort, sort_by_variable, method_of_sorting):
-        if method_of_sorting == 'Top'.lower():
-            dataset_to_sort.sort_values(sort_by_variable, ascending = False)
-        elif method_of_sorting == 'Bottom'.lower():
-            dataset_to_sort.sort_values(sort_by_variable, ascending = True)
+    # def sorting(self, dataset_to_sort, sort_by_variable, method_of_sorting):
+    #     if method_of_sorting == 'Top'.lower():
+    #         dataset_to_sort.sort_values(sort_by_variable, ascending = False)
+    #     elif method_of_sorting == 'Bottom'.lower():
+    #         dataset_to_sort.sort_values(sort_by_variable, ascending = True)
             
     
     # def filtering_data_by_review_number(self, operator, num_max_min_reviews, num_upperbound_reviews = None):   

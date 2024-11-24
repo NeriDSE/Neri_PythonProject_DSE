@@ -11,7 +11,7 @@ class graph():
 
     # Plotting the New_Bayesian_Average vs the common average for the top rated games (explain it better, idk what tf this means)
     
-    def horizontal_bar_graph(self, graph_title, y_labels = 'Name', top_color = 'red' ):
+    def horizontal_bar_graph(self, graph_title, top_color = 'red', y_labels = 'Name' ):
         '''Method plots a top 10 Horizontal Bar Plot'''
     # data
         if self.ascending.lower() == 'n':

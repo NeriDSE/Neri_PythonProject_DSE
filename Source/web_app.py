@@ -22,16 +22,16 @@ clean_review_data = clean_review_data.rename(columns = {"user":"User", "rating":
 
 image = 'boardgame.jpg' 
 st.image(f'{data_path}\{image}')
-st.title("Welcome to the Ranking Board App! 🎲")
+st.title("Welcome to the Ranking Board App! 🎲♟️")
 st.markdown("Discover ways to compare the rankings of your favorite board games")
 
 
 # display all of my cleaned datasets
 st.markdown("*The datasets:*")
-st.write('First of all, a glimpse into the Rank dataset')
+st.write('First of all, a glimpse into the Rank dataset:')
 st.write(clean_rank_data.head(5))
 
-st.write(' Then, a glimpse into the Reviews dataset')
+st.write(' Then, into the Reviews dataset:')
 
 st.write(clean_review_data.head(5))
 
@@ -53,10 +53,11 @@ if selectbox_algorithms =='Wilson Function':
 elif selectbox_algorithms == 'New Bayesian Average':
         st.write(f'The New Bayesian Score of {selectbox_name} is:', ra.bayesian_average(name_to_x(selectbox_name, 'ID'), clean_rank_data, clean_review_data))
 elif selectbox_algorithms == 'Arithmetic Mean':
-        st.write(f'The Arithmetic Mean of {selectbox_name} is:', name_to_x(selectbox_name, 'ID'))
+        st.write(f'The Arithmetic Mean of {selectbox_name} is:', name_to_x(selectbox_name, 'Average'))
 else:
         st.write('Please enter a valid ranking algorithm and or a valid game')
         
+st.markdown("*The ranking and the graph, based on the total number of reviews per game:*")
         
 st.write("You can filter the rank dataset based on how the previously chosen algorithm and the number of reviews each game's received ")
 

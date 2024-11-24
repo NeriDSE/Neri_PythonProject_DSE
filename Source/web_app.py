@@ -88,14 +88,14 @@ filtered_by_bayes = rb.dataset_by_review_bracket('mid_reviewed', clean_rank_data
 middle_by_bayes = filtered_by_bayes.add_column_to_df_filtered_by_reviews('New Bayesian Average', 4000)
 graph6 = gr.graph('Mid reviewed by Bayes', middle_by_bayes, 'New Bayesian Average', 'n')
 
-filtered_by_mean = rb.dataset_by_review_bracket('most_reviewed', clean_rank_data, clean_review_data, ra.wilson_function, 'greater', 50000)
-graph7 = gr.graph('Most reviewed by Mean', filtered_by_mean, 'Average', 'n')
+most_by_mean = most_by_bayes.drop(['New Bayesian Average'], axis= 1)
+graph7 = gr.graph('Most reviewed by Mean', most_by_mean, 'Average', 'n')
 
-filtered_by_mean = rb.dataset_by_review_bracket('least_reviewed', clean_rank_data, clean_review_data, ra.wilson_function, 'equal', 50)
-graph8 = gr.graph('Least reviewed by Mean', filtered_by_mean, 'Average', 'n')
+least_by_mean = least_by_bayes.drop(['New Bayesian Average'], axis= 1)
+graph8 = gr.graph('Least reviewed by Mean', least_by_mean, 'Average', 'n')
 
-filtered_by_mean = rb.dataset_by_review_bracket('mid_reviewed', clean_rank_data, clean_review_data, ra.wilson_function, 'between', 3700)
-graph9 = gr.graph('Mid reviewed by Mean', filtered_by_mean, 'Average', 'n')
+middle_by_mean = middle_by_bayes.drop(['New Bayesian Average'], axis= 1)
+graph9 = gr.graph('Mid reviewed by Mean', middle_by_mean, 'Average', 'n')
 
 if selectbox_algorithms == 'Wilson Function':
         if selectbox_filtered == 'Most reviewed':
@@ -128,14 +128,16 @@ elif selectbox_algorithms == 'New Bayesian Average':
                 st.write('An error occurred, please select a valid option')
 elif selectbox_algorithms == 'Arithmetic Mean':
         if selectbox_filtered == 'Most reviewed':
-                st.write('Here is your filtered dataframe', filtered_by_mean.sort_values('Mean', ascending = False))
+                
+                st.write('Here is your filtered dataframe', most_by_mean.sort_values('Average', ascending = False))
                 st.pyplot(graph7.horizontal_bar_graph('Mean based ranking, 50k+ reviews'))        
         elif selectbox_filtered == 'Least reviewed':
-                st.write('Here is your filtered dataframe', filtered_by_mean.sort_values('Mean', ascending = False))
+                least_by_bayes.drop(['New Bayesian Average'], axis= 1)
+                st.write('Here is your filtered dataframe', least_by_mean.sort_values('Average', ascending = False))
                 st.pyplot(graph8.horizontal_bar_graph('Mean based ranking, 50 reviews'))        
         elif selectbox_filtered == 'a Middle ground':
-                
-                st.write('Here is your filtered dataframe', filtered_by_mean.sort_values('Mean', ascending = False))       
+                middle_by_bayes.drop(['New Bayesian Average'], axis= 1)
+                st.write('Here is your filtered dataframe', middle_by_mean.sort_values('Average', ascending = False))       
                 st.pyplot(graph9.horizontal_bar_graph('Mean based ranking, between 3700 and 4000 reviews'))                     # these have to be properly segmented jesus lord christ superstar.
                           
         

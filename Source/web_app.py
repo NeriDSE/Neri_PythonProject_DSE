@@ -31,7 +31,7 @@ st.markdown("*The datasets:*")
 st.write('First of all, a glimpse into the Rank dataset:')
 st.write(clean_rank_data.head(5))
 
-st.write(' Then, into the Reviews dataset:')
+st.write('Then, into the Reviews dataset:')
 
 st.write(clean_review_data.head(5))
 

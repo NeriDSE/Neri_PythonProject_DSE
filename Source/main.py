@@ -4,12 +4,7 @@ import graph as gr
 from Source.data_processing import clean_rank_data, clean_review_data
 
 
-
-
-# presentation should be something I zoom through... first thing tomorrow
-
-# round1 of explanations
-
+# bayesian average explanation, dataframe look through.
 # more data cleaning shit...
 # name of df kind of useless... I'm taking it out tomorrow
 

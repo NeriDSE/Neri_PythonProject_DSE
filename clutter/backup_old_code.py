@@ -137,10 +137,14 @@ Bayesian_column = New_Column(clean_data2, Bayesian_Average)
 
 clean_data2.insert(-1, 'Bayesian_Average', Bayesian_column )
 
-# Calculate the Bayesian and Wilson score columns and graph them
-# it's proving difficult to obtain the columns.
+# if you forget how to run shit:  
+filtered_dataset_by_wilson = rb.dataset_by_review_bracket('most_reviewed', clean_rank_data, clean_review_data, ra.wilson_function, 'greater', 80000)
+most_reviewed_games_by_wilson = filtered_dataset_by_wilson.add_column_to_df_filtered_by_reviews('Wilson function')
+graph1 = gr.graph('most reviewed by wilson', most_reviewed_games_by_wilson, 'Wilson function', 'n')
 
-
+filtered_dataset_by_bayes = rb.dataset_by_review_bracket('in between reviewed', clean_rank_data, clean_review_data, ra.bayesian_average, 'between', 3900)
+mid_reviewed_games_by_bayes = filtered_dataset_by_bayes.add_column_to_df_filtered_by_reviews('New Bayesian Average', 4000)
+mid_reviewed_games_by_bayes.sort_values('New Bayesian Average', ascending = False)
 
 # I could count the number of comments. Find certain amounts of words. mix the comments with the votes for example... 
 # the top voters, rank them. the experienced guard.

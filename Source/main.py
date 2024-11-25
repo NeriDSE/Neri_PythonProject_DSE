@@ -1,7 +1,7 @@
-import dataset_by_review_bracket as rb
-import ranking_algorithms as ra
-import graph as gr
-from Source.data_processing import clean_rank_data, clean_review_data
+import Source.modules.dataset_by_review_bracket as rb
+import Source.modules.ranking_algorithms as ra
+import Source.modules.graph as gr
+from Source.modules.data_processing import clean_rank_data, clean_review_data
 
 
 # bayesian average explanation, dataframe look through.

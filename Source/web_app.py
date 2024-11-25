@@ -1,9 +1,9 @@
 import streamlit as st
 import pandas as pd
 import os
-import ranking_algorithms as ra
-import dataset_by_review_bracket as rb
-import graph as gr
+import modules.ranking_algorithms as ra
+import modules.dataset_by_review_bracket as rb
+import modules.graph as gr
 # from data_processing import clean_rank_data, clean_review_data
 
 
@@ -63,6 +63,8 @@ st.write("You can filter the rank dataset based on how the previously chosen alg
 
 list_reviewed = ['Most reviewed', 'Least reviewed', 'a Middle ground']
 selectbox_filtered = st.selectbox('How many reviews would you like your game to have?', list_reviewed )
+
+
 
 filtered_by_wilson = rb.dataset_by_review_bracket('most_reviewed', clean_rank_data, clean_review_data, ra.wilson_function, 'greater', 50000)
 most_by_wilson = filtered_by_wilson.add_column_to_df_filtered_by_reviews('Wilson function')
